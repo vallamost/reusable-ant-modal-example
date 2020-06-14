@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import uuid from 'react-uuid'
 var Sentencer = require('sentencer');
 

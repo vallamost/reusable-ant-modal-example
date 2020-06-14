@@ -1,10 +1,13 @@
 import React, { useState, Fragment } from 'react'
 
-import DeleteModal from '../components/DeleteModal';
-import { DeleteTwoTone, } from '@ant-design/icons';
+import EditModal from '../components/EditModal';
+import { EditTwoTone, } from '@ant-design/icons';
 
 
-export default function DeleteExpense(props) {
+export default function EditExpense(props) {
+
+    const expense_to_edit = [props.id, props.name, props.amount]
+
 
     const [modalVisibleBool, showModal] = useState(false)
     const [expenseToDelete, setExpenseToDelete] = useState({
@@ -23,11 +26,11 @@ export default function DeleteExpense(props) {
 
     }
 
-    const onCancelDeleteModal = () => {
+    const onCancelEditModal = () => {
         showModal(false)
     }
 
-    const onConfirmDelete = (props) => {
+    const onConfirmEdit = (props) => {
 
         console.log("Deleting expense: " + Object.values(expenseToDelete).join(', '))
 
@@ -41,22 +44,22 @@ export default function DeleteExpense(props) {
     return (
 
         <Fragment>
-            <DeleteTwoTone key={props.id}
+            <EditTwoTone key={props.id}
                 onClick={() => (
                     showDeleteModal(props)
                 )}
 
             />
 
-            <DeleteModal
+            <EditModal
                 showModal={modalVisibleBool}
-                onOkay={() => onConfirmDelete({
+                onOkay={() => onConfirmEdit({
                     updateExpensesFn: props.updateExpensesFn,
                     expenses: props.expenses,
                     expenseToDelete
                 })}
-                cancelFn={() => onCancelDeleteModal()}
-                expenseToDelete={expenseToDelete}
+                cancelFn={() => onCancelEditModal()}
+                expenseToEdit={expense_to_edit}
 
             />
         </Fragment>

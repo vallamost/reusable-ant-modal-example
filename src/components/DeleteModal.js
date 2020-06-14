@@ -4,13 +4,13 @@ import {  Modal } from "antd";
 
 export default function DeleteModal(props) {
 
-    // console.log(props)
 
-    const [modalVisible, showModal] = useState(false)
+    // not sure how to use this from the parent..
+    // const [modalVisible, showModal] = useState(false)
 
     return (
 
-        <div>
+        <Fragment>
             <Modal
                 title="Are you sure you want to delete the expense"
                 visible={props.showModal}
@@ -21,7 +21,7 @@ export default function DeleteModal(props) {
                 <b>{props.expenseToDelete.expenseNameToDelete}</b>
                 <p>{props.expenseToDelete.expenseAmountToDelete}</p>
             </Modal >
-        </div>
+        </Fragment>
 
     )
 }
