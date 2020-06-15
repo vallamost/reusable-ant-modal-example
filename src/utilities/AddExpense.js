@@ -6,9 +6,9 @@ export default function AddExpense(props) {
     const current_expenses = Object.values(props.expenses);
 
     const newExpense = {
-        "id": uuid(),
-        "name": Sentencer.make("{{ noun }}"),
-        "amount": (Math.random() * 1000).toFixed(2),
+        id: uuid(),
+        name: Sentencer.make("{{ noun }}"),
+        amount: Number((Math.random() * 1000).toFixed(2)),
     }
 
     current_expenses.push(newExpense)

@@ -1,20 +1,21 @@
 import React, { useState, Fragment } from 'react'
 
-import EditModal from '../components/EditModal';
+import { Form, Input } from 'antd';
 import { EditTwoTone, } from '@ant-design/icons';
 
+import Modal from '../components/Modal'
+import useModal from '../utilities/useModal'
+import produce from "immer"
 
 export default function EditExpense(props) {
 
-    const expense_to_edit = [props.id, props.name, props.amount]
-
-
+    const { isShowing, toggle } = useModal();
     const [modalVisibleBool, showModal] = useState(false)
     const [expenseToDelete, setExpenseToDelete] = useState({
         expenseIdToDelete: null, expenseNameToDelete: null, expenseAmountToDelete: null
     })
 
-    const showDeleteModal = (props) => {
+    const showEditModal = (props) => {
 
         setExpenseToDelete({
             expenseIdToDelete: props.id,
@@ -22,46 +23,89 @@ export default function EditExpense(props) {
             expenseAmountToDelete: props.amount,
         })
 
-        showModal(true)
+        toggle(true)
 
     }
 
-    const onCancelEditModal = () => {
-        showModal(false)
-    }
 
-    const onConfirmEdit = (props) => {
+    const layout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+    };
 
-        console.log("Deleting expense: " + Object.values(expenseToDelete).join(', '))
+    const [form] = Form.useForm();
 
-        const newExpensesState = props.expenses.filter(item => item.id !== props.expenseToDelete.expenseIdToDelete);
+    const onSubmit = values => {
+        console.log('Received values of form: ', values);
+        console.log("item ID: " + props.id)
 
-        props.updateExpensesFn(newExpensesState)
-        showModal(false)
+        const updatedExpensesArray = produce(props.expenses, draft => {
+            const index = draft.findIndex(i => i.id === props.id)
+            if (index !== -1) {
+                draft[index].name = values.expenseName
+                draft[index].amount = values.expenseAmount
+            }
+        })
+        console.log(updatedExpensesArray)
 
-    }
+        props.updateExpensesFn(updatedExpensesArray)
+
+    };
 
     return (
 
         <Fragment>
             <EditTwoTone key={props.id}
-                onClick={() => (
-                    showDeleteModal(props)
-                )}
+                onClick={() => (showEditModal(props))}
 
             />
 
-            <EditModal
-                showModal={modalVisibleBool}
-                onOkay={() => onConfirmEdit({
-                    updateExpensesFn: props.updateExpensesFn,
-                    expenses: props.expenses,
-                    expenseToDelete
-                })}
-                cancelFn={() => onCancelEditModal()}
-                expenseToEdit={expense_to_edit}
+            <Modal
+                isShowing={isShowing}
+                okayFn={() => {
+                    form
+                        .validateFields()
+                        .then(values => {
+                            form.resetFields();
+                            onSubmit(values);
+                        })
+                        .catch(info => {
+                            console.log('Validate Failed:', info);
+                        });
+                }}
+                cancelFn={toggle}
+                title={"Editing Expense - " + props.name}
+                modalBody={
+                    <Fragment>
+                        {/* <p>Name: {props.name}</p>
+                        <p>Amount: {props.amount}</p> */}
+                        <Form
+                            {...layout}
+                            name="basic"
+                            form={form}
+                            initialValues={{ expenseName: props.name, expenseAmount: props.amount }}
+                        >
+                            <Form.Item
+                                label="Expense Name"
+                                name="expenseName"
+                                rules={[{ required: true, message: 'Please input the expense name' }]}
+                            >
+                                <Input />
+                            </Form.Item>
 
+                            <Form.Item
+                                label="Expense Amount"
+                                name="expenseAmount"
+                                rules={[{ required: true, message: 'Please input the amount' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Form>
+
+                    </Fragment>
+                }
             />
+
         </Fragment>
 
     )

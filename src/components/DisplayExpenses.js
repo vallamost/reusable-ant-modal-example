@@ -56,7 +56,7 @@ export default function DisplayExpenses(props) {
     return (
 
         <div>
-            <Row gutter={[16, 8]}>
+            <Row gutter={[16, 16]}>
 
                 <ListOfExpenses />
                 <Button

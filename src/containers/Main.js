@@ -12,19 +12,19 @@ export default function MainApp() {
 
     const [expenses, updateExpenses] = useState([
         {
-            "id": uuid(),
-            "name": Sentencer.make("{{ noun }}"),
-            "amount": 53.22,
+            id: uuid(),
+            name: Sentencer.make("{{ noun }}"),
+            amount: 53.22,
         },
         {
-            "id": uuid(),
-            "name": Sentencer.make("{{ noun }}"),
-            "amount": 76.16,
+            id: uuid(),
+            name: Sentencer.make("{{ noun }}"),
+            amount: 76.16,
         },
         {
-            "id": uuid(),
-            "name": Sentencer.make("{{ noun }}"),
-            "amount": 716.16,
+            id: uuid(),
+            name: Sentencer.make("{{ noun }}"),
+            amount: 716.16,
         },
     ])
 
